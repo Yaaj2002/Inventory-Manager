@@ -1,0 +1,70 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users Collection: Allow users to read their own profile, but not others' profiles.
+    match /users/{userId} {
+      // Allow read/write only if the user is authenticated and accessing their own document
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Admin and Moderator Roles - Define roles with custom claims
+    match /posts/{postId} {
+      // Read is public for anyone
+      allow read: if true;
+
+      // Moderators and admins can update a post
+      allow update: if request.auth != null && 
+                    (request.auth.token.role == 'admin' || request.auth.token.role == 'moderator') &&
+                    exists(/databases/$(database)/documents/posts/$(postId));
+
+      // Admins can delete posts
+      allow delete: if request.auth != null && request.auth.token.role == 'admin';
+
+      // Only allow creating a post if authenticated and a non-admin can only create a post
+      allow create: if request.auth != null && request.auth.token.role != 'admin' && 
+                    request.resource.data.keys().hasOnly(['title', 'content', 'authorId']) &&
+                    request.resource.data.title is string && 
+                    request.resource.data.content is string &&
+                    request.resource.data.title.size() <= 200 && 
+                    request.resource.data.content.size() <= 5000;
+    }
+
+    // Rate-Limiting Rule - Prevent DoS (Denial of Service) by rate-limiting writes
+    match /posts/{postId} {
+      allow create: if request.auth != null && 
+                    request.auth.uid != null && 
+                    request.time - get(/databases/$(database)/documents/users/$(request.auth.uid)).data.lastPostTime > duration.value(10, 'minutes');
+    }
+
+    // Comments Collection: Allow authenticated users to comment, but validate comment length
+    match /posts/{postId}/comments/{commentId} {
+      allow create: if request.auth != null && 
+                    request.resource.data.keys().hasOnly(['authorId', 'content']) &&
+                    request.resource.data.content is string && 
+                    request.resource.data.content.size() <= 500;
+
+      // Only allow the author or admins to delete comments
+      allow delete: if request.auth != null && 
+                    (request.auth.uid == resource.data.authorId || request.auth.token.role == 'admin');
+    }
+
+    // Transaction History Collection: Admins can see all, but users can only see their own transactions
+    match /transactions/{transactionId} {
+      allow read: if request.auth != null && 
+                  (request.auth.token.role == 'admin' || request.auth.uid == resource.data.userId);
+
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+
+    // General Validation and Safety for Fields - Ensuring fields are sanitized and controlled
+    match /posts/{postId} {
+      allow create: if request.auth != null &&
+                    request.resource.data.keys().hasOnly(['title', 'content', 'authorId', 'createdAt']) &&
+                    request.resource.data.title is string &&
+                    request.resource.data.content is string &&
+                    request.resource.data.title.size() <= 200 &&
+                    request.resource.data.content.size() <= 5000 &&
+                    request.resource.data.createdAt == request.time;
+    }
+  }
+}

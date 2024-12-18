@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/style.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon-16x16.png" />
+    <link rel="manifest" href="./assets/images/site.webmanifest" />
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Test Project</h1>
+      <div id="navBar">
+        <button id="plateInventoryBtn">Plate Inventory</button>
+        <button id="logout-btn">Log Out</button>
+      </div>
+    </header>
+    <div id="form-container">
+      <form id="plate-form">
+        <h2>Add Plate</h2>
+        <label for="product-name">Product Name:</label>
+        <input id="product-name" type="text" />
+        <label for="part-number">Part Number:</label>
+        <input id="part-number" type="text" />
+        <label for="customer">Customer:</label>
+        <select name="customer" id="customer">
+          <option value="Pepsi Frap">Pepsi Frap</option>
+          <option value="Alani">Alani</option>
+          <option value="Algood">Algood</option>
+          <option value="Bai">Bai</option>
+          <option value="Body Armor">Body Armor</option>
+          <option value="Caprisun">Caprisun</option>
+          <option value="Chic-fil-a">Chic-fil-a</option>
+          <option value="Clorox">Clorox</option>
+          <option value="Dannon">Dannon</option>
+          <option value="Equate">Equate</option>
+          <option value="Fuji Seal">Fuji Seal</option>
+          <option value="Gatorlyte">Gatorlyte</option>
+          <option value="Gehl">Gehl</option>
+          <option value="Heartland">Heartland</option>
+          <option value="HEB">HEB</option>
+          <option value="Kinderlyte">Kinderlyte</option>
+          <option value="Lacolombe">Lacolombe</option>
+          <option value="Marie's">Marie's</option>
+          <option value="MAS+">MAS+</option>
+          <option value="McDonald's">McDonald's</option>
+          <option value="Motts">Motts</option>
+          <option value="NC AFSeal">NC AFSeal</option>
+          <option value="Niagara">Niagara</option>
+          <option value="PF">PF</option>
+          <option value="PG">PG</option>
+          <option value="Prime">Prime</option>
+          <option value="Saputo">Saputo</option>
+          <option value="SixStar">SixStar</option>
+          <option value="Skinny Mixes">Skinny Mixes</option>
+          <option value="Snapple">Snapple</option>
+          <option value="Stueben">Stueben</option>
+          <option value="Trumoo">Trumoo</option>
+          <option value="Vitafusion">Vitafusion</option>
+          <option value="Whole Moon">Whole Moon</option>
+          <option value="Yaya">Yaya</option>
+        </select>
+        <label for="location">Location:</label>
+        <input id="location" type="text" />
+        <label for="sleeve-size">Sleeve Size:</label>
+        <input id="sleeve-size" type="number" />
+        <label for="colors"># of Colors:</label>
+        <input id="colors" type="number" />
+        <label for="rack">Rack</label>
+        <select name="racks" id="rack">
+          <option value="A1">A1</option>
+          <option value="A2">A2</option>
+          <option value="A3">A3</option>
+          <option value="B1">B1</option>
+          <option value="B2">B2</option>
+          <option value="B3">B3</option>
+          <option value="2C">2C</option>
+          <option value="3C">3C</option>
+          <option value="D1">D1</option>
+        </select>
+        <label for="box">Box?</label>
+        <select name="box" id="box" aria-placeholder="Are plates in a box?">
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+        <label for="common-plates">Common?</label>
+        <input id="common-plates" type="text" />
+        <label for="plate-type">Plate Type:</label>
+        <select name="plate-type" id="plate-type" aria-placeholder="Plate Type">
+          <option value="Kodak">Kodak</option>
+          <option value="Dupont">Dupont</option>
+          <option value="SGS">SGS</option>
+        </select>
+        <label for="plate-status">Plate Status:</label>
+        <select name="status" id="plate-status" aria-placeholder="Plate Status">
+          <option value="OK"></option>
+          <option value="Incomplete"></option>
+        </select>
+        <label for="missing-plates">Missing Plates?</label>
+        <input id="missing-plates" type="text" />
+        <label for="saved-by">Saved By?</label>
+        <input id="saved-by" type="text" />
+        <label for="press">For Press?</label>
+        <select
+          name="press"
+          id="press"
+          aria-placeholder="Which press are the plates on?"
+        >
+          <option value="P1">P1</option>
+          <option value="P2">P2</option>
+          <option value="P3">P3</option>
+        </select>
+        <label for="moved-by">Moved By?</label>
+        <input id="moved-by" type="text" />
+        <button id="submit-btn">Submit</button>
+      </form>
+    </div>
+    <script src="../UX/index.js"></script>
+  </body>
+</html>
